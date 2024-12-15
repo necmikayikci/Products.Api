@@ -1,0 +1,28 @@
+version: '3.4'
+
+name: "products_demo"
+
+services:
+  #API
+  products.api:
+    image: ${DOCKER_REGISTRY-}productsapi
+    container_name: products.api
+    build:
+      context: .
+      dockerfile: Products.Api/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  #DB
+  products.database:
+    image: postgres:latest
+    container_name: products.database
+    environment:
+      - POSTGRES_DB=products
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/products-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
